@@ -1,0 +1,20 @@
+runcmd:
+  -  [sh, -c, 'curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl']
+  -  [sh, -c, 'chmod +x ./kubectl']
+  -  [sh, -c, 'mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH']
+  -  [sh, -c, echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc']
+  -  [sh, -c, "echo 'kubectl version --client' >> /run/log.txt"]
+
+  -  [sh, -c, 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp']
+  -  [sh, -c, 'sudo mv /tmp/eksctl /usr/local/bin']
+  -  [sh, -c, "echo 'eksctl version'  >> /run/log.txt"]
+
+
+  - [sh, -c, "echo 'eksctl version'  >> /run/log.txt"]
+  - [sh, -c, 'wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo']
+  - [sh, -c, 'rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key']
+  - [sh, -c, 'yum upgrade']
+  - [sh, -c, 'dnf install java-17-amazon-corretto -y']
+  - [sh, -c, 'yum install jenkins -y']
+  - [sh, -c, 'systemctl enable jenkins']
+  - [sh, -c, 'systemctl start jenkins']
