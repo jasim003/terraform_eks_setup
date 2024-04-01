@@ -1,0 +1,43 @@
+ pipeline {
+    agent any
+        parameters {
+            string(defaultValue: 'dev', description: 'Name of the environment to deploy', name: 'EnvironmentName', trim: true)
+        }
+
+      environment {
+        PATH="/usr/local/bin:$PATH"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'c4b2addd-5cd4-4892-bbb4-7b34a202ebd6', url: 'https://github.com/jasim003/terraform_eks_setup.git'
+            }
+        }
+        stage('Nginx Deployment') {
+            steps {
+               sh '''
+               #!/bin/bash
+               pwd
+               ls -lthr
+                echo "Ngnix Application Deployment in progreess"
+                kubectl apply -f deploy.yaml`
+                fi
+               '''
+            }
+        }
+        stage('Pod Status') {
+            steps {
+               sh '''
+               #!/bin/bash
+               kubectl wait --for=condition=ready pod -l nginx-app -n "${EnvironmentName}" --timeout=30s
+               '''
+            }
+        }
+    }
+post {
+    always {
+        cleanWs( cleanWhenNotBuilt: false, disableDeferredWipeout: true, notFailBuild: true)
+    }
+}
+}
