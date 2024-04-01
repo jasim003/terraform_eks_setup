@@ -1,22 +1,21 @@
 # AWS EKS Setup using Terraform
 This setup uses a two-node cluster and has autoscaling set up to keep the minimum number of nodes required for high availability.
 
-# Providers used in this setup
+# Providers used in the code
 * AWS
 * Kubernetes
 * Helm
 
-# AWS Modules
+# Terraform Modules used in the coode
 * VPC
 * EKS
 * IAM
 
-
 # AWS Region
-Singapore = "ap-southeast-1"
+Singapore = **ap-southeast-1**
 
 # VPC Setup
-* VPC_Name = "devapp-eks-vpc"
+* VPC_Name = **devapp-eks-vpc**
 * CIDR Range =  ["10.20.0.0/16"]
 * Public Subnet = ["10.20.1.0/24", "10.20.2.0/24"]
 * Private Subnet = ["10.20.101.0/24", "10.20.102.0/24"]
@@ -26,9 +25,19 @@ Singapore = "ap-southeast-1"
 * Nat_gateway = One (Connected to Private Subnet with Public NAT Gateway)
 
 # IAM Policy and Role
-* ELK Master Policy and Role
-* ELK Worker Policy and Role
+* EKS Master Node Policy and Role
+* EKS Worker Node Policy and Role
 * ELB Policy and Role
 
-# Cmd to Connect to EKS Cluster via Kube config
-* aws eks update-kubeconfig --region ap-southeast-1 --name Dev-eks-cluster
+# EKS Cluster Addon
+* coredns
+* kube-proxy
+* vpc-cni
+
+# Cmd to Connect to EKS Cluster via Kube configfile
+* aws eks update-kubeconfig --region ap-southeast-1 --name Dev-eks-
+
+
+# Kubectl cmd to check the kubernetes resource
+* Kubectl get nodes
+* kubectl get all -n kube=system
