@@ -14,6 +14,15 @@
                 git branch: 'main', credentialsId: 'c4b2addd-5cd4-4892-bbb4-7b34a202ebd6', url: 'https://github.com/jasim003/terraform_eks_setup.git'
             }
         }
+        stage('Kubernetes Cluster update') {
+            steps {
+               sh '''
+               #!/bin/bash
+               aws eks update-kubeconfig --region ap-southeast-1 --name Dev-eks-cluster
+               '''
+            }
+        }
+
         stage('Nginx Deployment') {
             steps {
                sh '''
@@ -21,8 +30,7 @@
                pwd
                ls -lthr
                 echo "Ngnix Application Deployment in progreess"
-                kubectl apply -f deploy.yaml`
-                fi
+                kubectl apply -f deploy.yaml
                '''
             }
         }
@@ -30,7 +38,7 @@
             steps {
                sh '''
                #!/bin/bash
-               kubectl wait --for=condition=ready pod -l nginx-app -n "${EnvironmentName}" --timeout=30s
+               kubectl wait --for=condition=ready pod -l app=nginx-app -n "${EnvironmentName}" --timeout=30s
                '''
             }
         }
