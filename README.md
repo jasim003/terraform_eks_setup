@@ -50,4 +50,4 @@ Singapore = **ap-southeast-1**
 * kubectl logs -f -n kube-system -l app.kubernetes.io/instance=aws-load-balancer-controller
 
 # Docker Container
-* Created the custome Docker container with attached index file
+* Created the Custom Docker container with attached index file
