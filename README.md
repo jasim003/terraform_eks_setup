@@ -6,7 +6,7 @@ This setup uses a two-node cluster in the private subnet and access the applicat
 * Kubernetes
 * Helm
 
-# Terraform Modules used in the coode
+# Terraform Modules used in the code
 * VPC
 * EKS
 * IAM
