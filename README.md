@@ -1,5 +1,5 @@
 # AWS EKS Setup using Terraform
-This setup uses a two-node cluster and has autoscaling set up to keep the minimum number of nodes required for high availability.
+This setup uses a two-node cluster in the private subnet and access the application via the LoadBalance and has autoscaling set up to keep the minimum number of nodes required for high availability
 
 # Providers used in the code
 * AWS
@@ -35,9 +35,19 @@ Singapore = **ap-southeast-1**
 * vpc-cni
 
 # Cmd to Connect to EKS Cluster via Kube configfile
-* aws eks update-kubeconfig --region ap-southeast-1 --name Dev-eks-
-
+* aws eks update-kubeconfig --region ap-southeast-1 --name Dev-eks-cluster
 
 # Kubectl cmd to check the kubernetes resource
+## Check the Worker Nodes
 * Kubectl get nodes
+## Check the Resource in the default namepsace
 * kubectl get all -n kube=system
+
+# Kubectl TroubleShooting command
+## Kubernetes Service account check
+* kubectl describe sa aws-load-balancer-controller -n kube-system
+## LoadBalancer logs
+* kubectl logs -f -n kube-system -l app.kubernetes.io/instance=aws-load-balancer-controller
+
+# Docker Container
+* Created the custome Docker container with attached index file

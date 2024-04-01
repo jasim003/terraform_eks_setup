@@ -1,12 +1,11 @@
 resource "aws_iam_policy" "kubernetes_alb_controller" {
   count       = var.enabled ? 1 : 0
   name        = "${var.ClusterName}-alb-controller"
-#   path        = "/"
   description = "Policy for load balancer controller service"
   policy = file("templates/alb_controller_iam_policy.json")
 }
 
-# Role
+# Role for Web identity
 data "aws_iam_policy_document" "kubernetes_alb_controller_assume" {
   count = var.enabled ? 1 : 0
 
@@ -15,12 +14,12 @@ data "aws_iam_policy_document" "kubernetes_alb_controller_assume" {
 
      principals {
       type        = "Federated"
-      identifiers = ["arn:aws:iam::${local.account_id}:oidc-provider/${replace("aws_eks_cluster.dev-eks-cluster.identity[0].oidc[0].issuer", "https://", "")}"]
+      identifiers = [module.eks.oidc_provider_arn]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${replace("aws_eks_cluster.dev-eks-cluster.identity[0].oidc[0].issuer", "https://", "")}:sub"
+      variable = "${module.eks.oidc_provider}:sub"
 
       values = [
         "system:serviceaccount:${var.namespace}:${var.service_account_name}",
@@ -29,7 +28,7 @@ data "aws_iam_policy_document" "kubernetes_alb_controller_assume" {
 
     condition {
       test     = "StringEquals"
-      variable = "${replace("aws_eks_cluster.dev-eks-cluster.identity[0].oidc[0].issuer", "https://", "")}:aud"
+      variable = "${module.eks.oidc_provider}:aud"
 
       values = [
         "sts.amazonaws.com"

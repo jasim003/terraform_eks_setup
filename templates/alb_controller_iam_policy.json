@@ -214,6 +214,44 @@
                 "elasticloadbalancing:ModifyRule"
             ],
             "Resource": "*"
-        }
+        },
+        {
+        "Effect": "Allow",
+        "Action": [
+           "elasticloadbalancing:CreateLoadBalancer"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+           "elasticloadbalancing:AddTags"
+        ],
+        "Resource": "*",
+        "Condition": {
+           "StringEquals": {
+               "elasticloadbalancing:CreateAction" : "CreateLoadBalancer"
+            }
+         }
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+           "elasticloadbalancing:CreateTargetGroup"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+           "elasticloadbalancing:AddTags"
+        ],
+        "Resource": "*",
+        "Condition": {
+           "StringEquals": {
+               "elasticloadbalancing:CreateAction" : "CreateTargetGroup"
+            }
+         }
+      }
     ]
-}
+    }
